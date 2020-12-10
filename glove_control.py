@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import time
+import RPi.GPIO as GPIO
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -81,13 +83,25 @@ def handle_key(key, state):
 
     return state
 
+def handle_button(channel, state):
+    key = {16: '0', 26: '1', 12: '2', 25: '3', 23: '4'}.get(channel, None)
+    if key:
+        handle_key(key, state)
+    else:
+        print(f'Received input from unexpected channel {channel}')
+
 def main():
     state = GloveState()
+    INPUT_PINS = [16, 26, 12, 25, 23]
+    GPIO.setmode(GPIO.BCM)
+    for channel in INPUT_PINS:
+        GPIO.setup(channel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(channel, GPIO.RISING,
+                              callback=lambda channel: handle_button(channel, state),
+                              bouncetime=1000)
+
     while True:
-        user_msg = 'enter key (q to quit): '
-        key = input(user_msg)
-        if key == 'q': return
-        state = handle_key(key, state)
+        time.sleep(10)
 
 if __name__ == '__main__':
     main()
