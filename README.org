@@ -1,0 +1,47 @@
+#+TITLE: Smart Glove: a tactile counterpart to smartwatches.
+
+[[./images/glove.jpg]]
+
+The smart glove is designed to expand our conception of what it means to interact with computers, and our environment. Rather than having to pull out a device and actively type or tap on it, with the smart glove, we can activate features simply by clicking our fingers together. Watch [[https://youtu.be/yoTY8nm-nXE][this short demo]] to get a taste of what can be done with a smart glove.
+
+* Materials
+- Fingerless Glove
+- Raspberry Pi Zero WH
+- Push buttons (like [[https://www.adafruit.com/product/1119?gclid=CjwKCAiAm-2BBhANEiwAe7eyFB5b8tcF3xxxFMqEYRRAy8kygxoy6UhzHaRvlYUDY6eqwIUSFkvIrRoCRtIQAvD_BwE][these]])
+- Female-male jumper wires
+* Assembly
+To assemble the glove, I first soldered the push buttons to the jumper wires (on the male end, removing the plastic casing.) Then, I fastened the buttons to the glove using the remaining two connectors to poke through the fabric, and placed electrical tape underneath. Finally, I plugged the jumper wires into the GPIO pins (for each button, one goes to an input pin, and one goes to ground,) and fastened the Raspberry Pi onto the glove using paperclips.
+* Setup
+Clone the repository on your Pi, and install dependencies using Pipenv:
+#+begin_src bash
+git clone https://github.com/ketan0/smart-glove.git
+cd smart-glove/
+pipenv install
+#+end_src
+
+In ~config.py~, fill in the dictionary ~PINS_TO_FINGERS~, which maps GPIO pins (refer to [[https://pinout.xyz/][pinout.xyz]]) to fingers (numbered 0 - 4, from thumb to pinky finger.) To use the features for adding to a spotify playlist and sending messages to a certain person on messenger, fill in the ~SPOTIFY_PLAYLIST_ID~ and the ~MESSENGER_ID~ of the person you want to communicate with.
+
+Also, create a file named ~.env~ in the root of the repository, and fill in the following variables (don't commit this file to source control, as it contains sensitive info!):
+#+begin_src bash
+# for your Spotify app
+# see https://spotipy.readthedocs.io/en/2.17.1/
+SPOTIPY_CLIENT_ID=""
+SPOTIPY_CLIENT_SECRET=""
+SPOTIPY_REDIRECT_URI=""
+
+# your Facebook email/password (for Messenger features)
+FB_EMAIL=""
+FB_PASSWORD=""
+
+# the IP of your Philips Hue Bridge
+HUE_BRIDGE_IP=""
+#+end_src
+
+* Usage
+To start listening for button presses on the glove, run:
+#+begin_src bash
+pipenv shell
+python glove_control.py
+#+end_src
+
+The glove starts out in "select mode," from which you can enter "spotify mode," "hue mode," and "messenger mode" by pressing the various buttons (see ~glove_control.py~ for details, and to modify this behavior.)
