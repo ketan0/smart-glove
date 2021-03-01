@@ -4,6 +4,8 @@
 
 The smart glove is designed to expand our conception of what it means to interact with computers, and our environment. Rather than having to pull out a device and actively type or tap on it, with the smart glove, we can activate features simply by clicking our fingers together. Watch [[https://youtu.be/yoTY8nm-nXE][this short demo]] to get a taste of what can be done with a smart glove.
 
+This project received a [[https://twitter.com/interhackt_/status/1342317606590529536?s=20][hardware shoutout]] in the Interhackt design hackathon!
+
 * Materials
 - Fingerless Glove
 - Raspberry Pi Zero WH
